@@ -26,3 +26,5 @@ class backup_personSerializer (serializers.ModelSerializer):
     class Meta:
         model = backup_person
         fields = '__all__'
+
+    

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 # our framework will automatically look for a template called apiOverview.html
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 # serializers import 
 from .serializers import dipendenteSerializer, lavoratoreSerializer, lavoroSerializer, esperienzaSerializer, backup_personSerializer
@@ -43,10 +44,11 @@ def dipendenteDetail(request, pk):
 
     return Response(serializer.data)
 
+# to take a data from a ftronend weuse put method
 @api_view(['POST']) # decorator per indicare che questa funzione è una view
 def dipendenteCreate(request):
-
-    serializer = dipendenteSerializer(data=request.data) # data è una variabile che contiene i dati che vengono passati dal client
+    # we ha to take the frontend data so we can do data = request.data  // where data is the data from frontend
+    serializer = dipendenteSerializer(data=request.data) # data è una variabile che contiene i dati che vengono passati dal client # qui dopo va pasatto solo data
     
     if serializer.is_valid():
         serializer.save() # salva i dati nel database
@@ -98,13 +100,13 @@ def apiOverviewLavoratore(request):
 
 
 @api_view(['GET']) # decorator per indicare che questa funzione è una view
+#@permission_classes([IsAuthenticated]) 
 def lavoratoreList(request):
 
     lavoratores = lavoratore.objects.all().order_by('-id')
     serializer = lavoratoreSerializer(lavoratores, many=True) # many=True perchè ci sono più lavoratori
 
     return Response(serializer.data)
-
 
 @api_view(['GET']) # decorator per indicare che questa funzione è una view
 def lavoratoreDetail(request, pk):
